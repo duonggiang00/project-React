@@ -8,6 +8,7 @@ const useFetchDemo = (path) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 
+	
 	const fetchList = async () => {
 		try {
 			setLoading(true);
