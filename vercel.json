@@ -4,22 +4,6 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/db.json",
-      "dest": "/db.json",
-      "headers": {
-        "Content-Type": "application/json"
-      }
-    }
   ]
 }
 
