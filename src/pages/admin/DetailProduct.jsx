@@ -23,6 +23,7 @@ function DetailProduct({item}) {
                   <p><strong>Title:</strong> {item.title}</p>
                   <p><strong>Price:</strong> {item.price}</p>
                   <p><strong>Description:</strong> {item.description}</p>
+                  <p><strong>Priority:</strong>{item.priority ===1?"Low" :item.priority === 2?"Medium":"High"}</p>
                   <p><strong>Status:</strong> {item.status?'completed':'pending'}</p>
                   <p><strong>Created At:</strong> {item.createdAt}</p>
                   {/* Thêm các trường khác nếu cần */}

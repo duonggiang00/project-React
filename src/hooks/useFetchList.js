@@ -10,7 +10,6 @@ const useFetchList = (path, query) => {
 	const fetchList = async () => {
 		try {
 			setLoading(true);
-			
 			const skip = (query.page - 1) * query.limit;
 			query.skip = skip;
 			let queryString = new URLSearchParams(query).toString();

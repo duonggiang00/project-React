@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 const inititalParams = {
-	q: "",
-	page: 1,
-	limit: 12,
-	sortBy: "",
-	order: "",
+	title_like: "",
+	_sort: "price",
+	_order: "asc",
+	_page: "1",
+	_limit: "4",
 };
 
 const useQuery = (query) => {

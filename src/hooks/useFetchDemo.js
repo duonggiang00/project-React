@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import api from "../api";
-import { deleteProduct, getAllProduct, getProductDetail, updateProduct } from "../api/productApi";
+import { deleteProduct, getProductDetail, getProductList, updateProduct } from "../api/productApi";
 import { toast } from "react-toastify";
 
-const useFetchDemo = (path) => {
+const useFetchDemo = (path,query) => {
 	const [list, setList] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
-
+	const [total, setTotal] = useState(0)
 	
 	const fetchList = async () => {
 		try {
 			setLoading(true);
-			const { data } = await getAllProduct();
+			let queryString = new URLSearchParams(query).toString();
+			console.log(queryString)
+			const { data } = await getProductList(queryString)
 			setList(data);
-			
 			setLoading(false);
 		} catch (error) {
 			setLoading(false);
@@ -55,7 +56,7 @@ const useFetchDemo = (path) => {
 
 	useEffect(() => {
 		fetchList();
-	}, []);
+	}, [query]);
 	return [list, fetchList, handleRemove, updateStatus ,updateProduct];
 };
 

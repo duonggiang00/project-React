@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import useFetchList from "../../hooks/useFetchList";
-import useQuery from "../../hooks/useQuery";
+import useQuery from "../../hooks/useQueryDemo";
 import { Link } from "react-router-dom";
 import useFetchDemo from "../../hooks/useFetchDemo";
 import { deleteProduct } from "../../api/productApi";
@@ -38,6 +38,13 @@ const FilterSection = styled.form`
 	margin-bottom: 3px;
 `
 const DemoListPage = () => {
+	const [params, updateParams, resetParams] = useQuery({
+		title_like: "",
+		_sort: "price",
+		_order: "asc",
+		_page: "1",
+		_limit: "12",
+	})
 	const [itemUpdate, setUpdate] = useState(false)
 	const [selectedItem, setSelectedItem] = useState();
 	const handleDetailClick = (item) => {
@@ -46,8 +53,23 @@ const DemoListPage = () => {
 	const handleUpdate = (id) => {
 		setUpdate(id);
 	}
+	const handlePage=(newPage)=>{
+    	updateParams({ ...params, _page: newPage})
+  	}
+	const handleLimit=(newLimit)=>{
+    	updateParams({ ...params, _limit: newLimit, page: 1 })
+  	}
+	const handleOrder = (newOrder)=>{
+		updateParams({...params, _order: newOrder, page:1})
+	}
+	const handleSortBy = (newSortBy)=>{
+		updateParams({...params, _sort: newSortBy, page:1})
+	}
+	const handleSearch = (search)=>{
+		updateParams({...params, title_like: search})
+	}
 	
-	const [products, fetchList, handleRemove,updateStatus] = useFetchDemo("products")
+	const [products, fetchList, handleRemove,updateStatus] = useFetchDemo("products",params)
 
 	return <ProductListTable>
 		<div className="mb-3">
@@ -57,31 +79,33 @@ const DemoListPage = () => {
 		<DetailProduct item={selectedItem} />
 		<FilterSection>
 			<div>
-				<select name="sort" id="sort">
+				<span>Sắp xếp theo: </span>
+				<select name="sort" id="sort" onChange={(e)=>handleSortBy(e.target.value)}>
                     <option value="id">default</option>
                     <option value="price">price</option>
-                    <option value="stock">stock</option>
-                    <option value="id">id</option>
+                    <option value="title">title</option>
+                    <option value="priority">priority</option>
             </select>
 			</div>
 			<div>
-				<select name="sort" id="sort">
+				<span>Thứ tự: </span>
+				<select name="sort" id="sort" onChange={(e)=>handleOrder(e.target.value)}>
                     <option value="">default</option>
                     <option value="asc">asc</option>
                     <option value="desc">desc</option>
             </select>
 			</div>
 			<div>
-				<span>Hiển thị </span>
-				<select name="limit" id="limit">
-					<option value="12">12</option>
-					<option value="20">20</option>
-					<option value="50">50</option>
+				<span>Hiển thị: </span>
+				<select name="limit" id="limit" onChange={(e)=>handleLimit(e.target.value)}>
+					<option value="4">4</option>
+					<option value="6">6</option>
+					<option value="8">8</option>
 				</select>
 				<span> sản phẩm</span>
 			</div>
 			<div>
-				<input type="input" id='search' name='search' />
+				<input type="input" id='search' name='search' onChange={(e) => handleSearch(e.target.value)} />
 			</div>
 			<div>
 				<button >Reset</button>
@@ -110,7 +134,7 @@ const DemoListPage = () => {
 						<tr key={item.id}>
 							<StyledTd>{item.id}</StyledTd>
 							<StyledTd>{item.title}</StyledTd>
-							<StyledTd>{item.priority}</StyledTd>
+							<StyledTd>{item.priority ===1?"Low" :item.priority === 2?"Medium":"High"}</StyledTd>
 							<StyledTd>{item.price}</StyledTd>
 							<StyledTd>{item.description}</StyledTd>
 							<StyledTd><button onClick={()=>{updateStatus(item.id,item.status)}} className={item.status ? 'btn btn-success' : 'btn btn-danger'}>{item.status?'completed':'pending'}</button></StyledTd>
@@ -126,8 +150,8 @@ const DemoListPage = () => {
 				</tbody>
 			</TableContent>
 			<div>
-				<button >Preview</button>
-				<button>Next</button>
+				<button disabled={+params._page === 1} onClick={() => handlePage(+params._page - 1)}>Preview</button>
+				<button onClick={() => handlePage(+params._page + 1)}>Next</button>
 			</div>
 			<ToastContainer />
 			
