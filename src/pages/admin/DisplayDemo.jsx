@@ -43,7 +43,7 @@ const DemoListPage = () => {
 		_sort: "price",
 		_order: "asc",
 		_page: "1",
-		_limit: "12",
+		_limit: "4",
 	})
 	const [itemUpdate, setUpdate] = useState(false)
 	const [selectedItem, setSelectedItem] = useState();
